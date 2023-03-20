@@ -37,7 +37,7 @@ pub struct Page {
 }
 
 impl Page {
-    pub fn component(&self) -> String {
+    pub fn controller(&self) -> String {
         let vars = self.path
             .iter()
             .filter(|x| match x {
@@ -62,17 +62,14 @@ impl Page {
             .replace("__VARIABLES__", &vars);
     }
 
-    pub fn cow(&self) -> String {
-    }
-
-    pub fn component_path(&self) -> PathBuf {
+    pub fn controller_path(&self) -> PathBuf {
         let script_name: String = self.script_name.clone().into();
-        return PathBuf::from(format!("components/{}.cbl", &script_name));
+        return PathBuf::from(format!("controllers/{}.cbl", &script_name));
     }
 
     pub fn view_path(&self) -> PathBuf {
         let script_name: String = self.script_name.clone().into();
-        return PathBuf::from(format!("view/{}.cow", &script_name));
+        return PathBuf::from(format!("views/{}.cow", &script_name));
     }
 
     pub fn to_route(&self) -> String {

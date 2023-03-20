@@ -36,9 +36,9 @@ fn main() -> Result<()> {
 
     for path in htmlers {
         let page: Page = path.path().try_into()?;
-        let component = page.component();
+        let component = page.controller();
 
-        std::fs::write(page.component_path(), component)?;
+        std::fs::write(page.controller_path(), component)?;
         std::fs::write(page.view_path(), page.contents)?;
     }
 

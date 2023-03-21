@@ -2,12 +2,21 @@ use std::path::{Path, PathBuf};
 
 use anyhow::anyhow;
 
-use crate::template::{self, COMPONENT};
+use crate::template::{self, CONTROLLER, VIEW, ROUTE};
 
 #[derive(Debug, Clone)]
 pub enum Chunk {
     Text(String),
     Variable(String),
+}
+
+impl Chunk {
+    pub fn to_path_string(&self) -> String {
+        match self {
+            Chunk::Text(value) => return value.clone(),
+            Chunk::Variable(value) => return format!("%{}", value),
+        }
+    }
 }
 
 impl From<Chunk> for String {
@@ -21,7 +30,7 @@ impl From<Chunk> for String {
 
 impl From<String> for Chunk {
     fn from(value: String) -> Self {
-        if value.starts_with(":") {
+        if value.starts_with("%") {
             return Chunk::Variable(value[1..].to_string());
         }
         return Chunk::Text(value);
@@ -37,6 +46,16 @@ pub struct Page {
 }
 
 impl Page {
+    fn route_pattern(&self) -> String {
+        let mut path = self.path
+            .iter()
+            .map(|chunk| chunk.to_path_string())
+            .collect::<Vec<String>>();
+
+        path.insert(0, self.script_name.to_path_string());
+
+        return path.join("/");
+    }
     pub fn controller(&self) -> String {
         let vars = self.path
             .iter()
@@ -57,9 +76,36 @@ impl Page {
 
         let script_name: String = self.script_name.clone().into();
 
-        return COMPONENT
+        return CONTROLLER
             .replace("__SCRIPT_NAME__", &script_name)
             .replace("__VARIABLES__", &vars);
+    }
+
+    pub fn view(&self) -> String {
+        let vars = self.path
+            .iter()
+            .filter(|x| match x {
+                Chunk::Variable(_) => true,
+                _ => false,
+            })
+            .map(|chunk| {
+                let name: String = chunk.clone().into();
+                return template::VIEW_VARIABLES
+                    .replace("__NAME__", &name);
+            })
+            .collect::<String>();
+
+        return VIEW
+            .replace("__BODY__", &self.contents)
+            .replace("__VARIABLES__", &vars);
+    }
+
+    pub fn route(&self, idx: usize) -> String {
+        let script_name: String = self.script_name.clone().into();
+        return ROUTE
+            .replace("__DESTINY__", &script_name)
+            .replace("__INDEX__", &idx.to_string())
+            .replace("__PATTERN__", &self.route_pattern());
     }
 
     pub fn controller_path(&self) -> PathBuf {
@@ -72,9 +118,6 @@ impl Page {
         return PathBuf::from(format!("views/{}.cow", &script_name));
     }
 
-    pub fn to_route(&self) -> String {
-        todo!("me daddy");
-    }
 }
 
 impl From<Page> for PathBuf {

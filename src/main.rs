@@ -4,6 +4,7 @@ mod pages;
 use std::path::{Path, PathBuf};
 
 use notify::{RecursiveMode, Watcher};
+use template::ROUTES;
 use walkdir::WalkDir;
 use anyhow::Result;
 
@@ -34,13 +35,23 @@ fn main() -> Result<()> {
         .filter_map(|e| e.ok())
         .filter(|dir| dir.file_name() == "index.html");
 
-    for path in htmlers {
+    let mut routes: Vec<String> = vec![];
+
+    for (idx, path) in htmlers.into_iter().enumerate() {
         let page: Page = path.path().try_into()?;
         let component = page.controller();
 
         std::fs::write(page.controller_path(), component)?;
-        std::fs::write(page.view_path(), page.contents)?;
+        std::fs::write(page.view_path(), &page.contents)?;
+
+        routes.push(page.route(idx + 1));
     }
+
+    let route_template = ROUTES
+        .replace("__ROUTE_COUNT__", routes.len().to_string().as_str())
+        .replace("__ROUTES__", routes.join("\n").as_str());
+
+    std::fs::write("./config.cbl", route_template)?;
 
     return Ok(());
 }

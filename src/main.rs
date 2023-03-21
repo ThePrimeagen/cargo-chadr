@@ -26,9 +26,12 @@ fn set_watcher() -> Result<()> {
 }
 
 fn main() -> Result<()> {
-    set_watcher()?;
+    // set_watcher()?;
 
-    let pages = PathBuf::from("pages");
+    let cwd = std::env::current_dir()?;
+
+    let pages = PathBuf::from(format!("{}/pages", cwd.to_string_lossy()));
+    println!("walking: {:?}", pages);
 
     let htmlers = WalkDir::new(&pages)
         .into_iter()

@@ -64,8 +64,8 @@ __ROUTES__
 "#;
 
 pub const ROUTE: &'static str = r#"
-           move "__PATTERN__" to routing-pattern(__INDEX__).
-           move "__DESTINY__" to routing-destiny(__INDEX__).
+move "__PATTERN__" to routing-pattern(__INDEX__).
+move "__DESTINY__" to routing-destiny(__INDEX__).
 "#;
 
 pub const VIEW: &'static str = r#"

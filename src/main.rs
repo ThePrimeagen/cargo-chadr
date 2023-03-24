@@ -1,15 +1,15 @@
-mod template;
 mod pages;
+mod template;
 
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 
-use notify::{RecursiveMode, Watcher};
+use anyhow::Result;
 use template::ROUTES;
 use walkdir::WalkDir;
-use anyhow::Result;
 
 use crate::pages::Page;
 
+/*
 fn set_watcher() -> Result<()> {
     let mut watcher = notify::recommended_watcher(|res| {
         match res {
@@ -24,14 +24,12 @@ fn set_watcher() -> Result<()> {
 
     return Ok(());
 }
+*/
 
 fn main() -> Result<()> {
     // set_watcher()?;
 
-    let cwd = std::env::current_dir()?;
-
-    let pages = PathBuf::from(format!("{}/pages", cwd.to_string_lossy()));
-    println!("walking: {:?}", pages);
+    let pages = PathBuf::from("pages");
 
     let htmlers = WalkDir::new(&pages)
         .into_iter()
@@ -42,10 +40,17 @@ fn main() -> Result<()> {
 
     for (idx, path) in htmlers.into_iter().enumerate() {
         let page: Page = path.path().try_into()?;
+        println!("page {:?}", page);
         let component = page.controller();
 
+        println!(
+            "writing cow path: controller={:?} view={:?}",
+            page.controller_path(),
+            page.view_path()
+        );
+
         std::fs::write(page.controller_path(), component)?;
-        std::fs::write(page.view_path(), &page.contents)?;
+        std::fs::write(page.view_path(), page.view())?;
 
         routes.push(page.route(idx + 1));
     }
@@ -58,5 +63,3 @@ fn main() -> Result<()> {
 
     return Ok(());
 }
-
-

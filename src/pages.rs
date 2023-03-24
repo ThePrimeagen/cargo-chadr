@@ -120,22 +120,6 @@ impl Page {
 
 }
 
-impl From<Page> for PathBuf {
-    fn from(value: Page) -> Self {
-        let script_name: String = value.script_name.into();
-        let mut out = PathBuf::from(script_name);
-
-        for chunk in value.path {
-            let chunk: String = chunk.into();
-            out.push(chunk);
-        }
-
-        let html: String = value.html.into();
-
-        return out;
-    }
-}
-
 impl TryFrom<&Path> for Page {
     type Error = anyhow::Error;
 

@@ -16,9 +16,9 @@ pub const CONTROLLER: &'static str = r#"
 
        01 the-values.
 
-          05 COW-query-values           occurs 10 times.
-            10 COW-query-value-name     pic x(90).
-            10 COW-query-value          pic x(90).
+          05 query-values           occurs 10 times.
+            10 query-value-name     pic x(90).
+            10 query-value          pic x(90).
 
 
        procedure division using the-values.

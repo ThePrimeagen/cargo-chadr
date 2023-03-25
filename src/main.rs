@@ -4,6 +4,7 @@ mod template;
 use std::path::PathBuf;
 
 use anyhow::Result;
+use pages::{CONTROLLERS, VIEWS};
 use template::ROUTES;
 use walkdir::WalkDir;
 
@@ -38,8 +39,8 @@ fn main() -> Result<()> {
 
     let mut routes: Vec<String> = vec![];
 
-    _ = std::fs::create_dir_all("controllers");
-    _ = std::fs::create_dir_all("views");
+    _ = std::fs::create_dir_all(CONTROLLERS);
+    _ = std::fs::create_dir_all(VIEWS);
 
     for (idx, path) in htmlers.into_iter().enumerate() {
         let page: Page = path.path().try_into()?;

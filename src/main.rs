@@ -38,6 +38,9 @@ fn main() -> Result<()> {
 
     let mut routes: Vec<String> = vec![];
 
+    _ = std::fs::create_dir_all("controllers");
+    _ = std::fs::create_dir_all("views");
+
     for (idx, path) in htmlers.into_iter().enumerate() {
         let page: Page = path.path().try_into()?;
         let component = page.controller();

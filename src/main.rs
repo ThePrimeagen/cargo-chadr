@@ -4,13 +4,31 @@ mod template;
 use std::path::PathBuf;
 
 use anyhow::Result;
-use pages::{CONTROLLERS, VIEWS};
 use template::ROUTES;
 use walkdir::WalkDir;
 
 use crate::pages::Page;
 
+/*
+fn set_watcher() -> Result<()> {
+    let mut watcher = notify::recommended_watcher(|res| {
+        match res {
+           Ok(event) => println!("event: {:?}", event),
+           Err(e) => println!("watch error: {:?}", e),
+        }
+    })?;
+
+    // Add a path to be watched. All files and directories at that path and
+    // below will be monitored for changes.
+    watcher.watch(Path::new("."), RecursiveMode::Recursive)?;
+
+    return Ok(());
+}
+*/
+
 fn main() -> Result<()> {
+    // set_watcher()?;
+
     let pages = PathBuf::from("pages");
 
     let htmlers = WalkDir::new(&pages)
@@ -19,9 +37,6 @@ fn main() -> Result<()> {
         .filter(|dir| dir.file_name() == "index.html");
 
     let mut routes: Vec<String> = vec![];
-
-    _ = std::fs::create_dir(CONTROLLERS);
-    _ = std::fs::create_dir(VIEWS);
 
     for (idx, path) in htmlers.into_iter().enumerate() {
         let page: Page = path.path().try_into()?;

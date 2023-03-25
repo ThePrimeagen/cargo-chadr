@@ -4,9 +4,6 @@ use anyhow::anyhow;
 
 use crate::template::{self, CONTROLLER, VIEW, ROUTE};
 
-pub const CONTROLLERS: &str = "controllers";
-pub const VIEWS: &str = "views";
-
 #[derive(Debug, Clone)]
 pub enum Chunk {
     Text(String),
@@ -113,12 +110,12 @@ impl Page {
 
     pub fn controller_path(&self) -> PathBuf {
         let script_name: String = self.script_name.clone().into();
-        return PathBuf::from(format!("{}/{}.cbl", CONTROLLERS, &script_name));
+        return PathBuf::from(format!("controllers/{}.cbl", &script_name));
     }
 
     pub fn view_path(&self) -> PathBuf {
         let script_name: String = self.script_name.clone().into();
-        return PathBuf::from(format!("{}/{}.cow", VIEWS, &script_name));
+        return PathBuf::from(format!("views/{}.cow", &script_name));
     }
 
 }

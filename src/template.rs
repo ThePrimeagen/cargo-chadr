@@ -31,7 +31,7 @@ pub const CONTROLLER: &'static str = r#"
 
        goback.
 
-       end program showname.
+       end program __SCRIPT_NAME__.
 "#;
 
 

@@ -4,7 +4,8 @@ mod template;
 use std::path::PathBuf;
 
 use anyhow::Result;
-use pages::{CONTROLLERS, VIEWS};
+use clap::Parser;
+use pages::{CONTROLLERS, VIEWS, CGI_BIN};
 use template::ROUTES;
 use walkdir::WalkDir;
 
@@ -27,6 +28,24 @@ fn set_watcher() -> Result<()> {
 }
 */
 
+#[derive(Debug, Parser)]
+enum Command {
+    // default command is build
+    #[clap(name = "chad")]
+    Chad,
+
+    #[clap(name = "init")]
+    Init,
+}
+
+#[derive(Debug, Parser)]
+struct Opts {
+
+    // positional arguments
+    #[clap(subcommand)]
+    action: Command,
+}
+
 fn main() -> Result<()> {
     // set_watcher()?;
 
@@ -45,9 +64,13 @@ fn main() -> Result<()> {
     for (idx, path) in htmlers.into_iter().enumerate() {
         let page: Page = path.path().try_into()?;
         let component = page.controller();
+        let script_name: String = page.script_name.clone().into();
 
         std::fs::write(page.controller_path(), component)?;
         std::fs::write(page.view_path(), page.view())?;
+
+        // unix is the only platform to run on
+        std::os::unix::fs::symlink(script_name, CGI_BIN)?;
 
         routes.push(page.route(idx + 1));
     }

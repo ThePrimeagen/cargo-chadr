@@ -3,9 +3,9 @@ use std::path::PathBuf;
 use anyhow::Result;
 use walkdir::WalkDir;
 
-use crate::pages::Page;
+use crate::{pages::Page, opts::Opts};
 
-pub fn link() -> Result<()> {
+pub fn link(opts: Opts) -> Result<()> {
 
     let pages = PathBuf::from("pages");
 
@@ -14,10 +14,11 @@ pub fn link() -> Result<()> {
         .filter_map(|e| e.ok())
         .filter(|dir| dir.file_name() == "index.html");
 
-    _ = std::fs::create_dir("cgi-bin");
-
     let cgi_bin = PathBuf::from("cgi-bin");
-    let the_cow = PathBuf::from("the.cow");
+    _ = std::fs::remove_dir_all(&cgi_bin)?;
+    _ = std::fs::create_dir(&cgi_bin);
+
+    let the_cow = PathBuf::from(opts.cow_path);
 
     for page in htmlers {
         let page: Page = page.path().try_into()?;

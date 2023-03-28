@@ -15,6 +15,7 @@ pub enum Command {
 }
 
 #[derive(Debug, Parser)]
+#[command(version)]
 pub struct Opts {
 
     // positional arguments

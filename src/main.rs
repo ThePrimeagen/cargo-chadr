@@ -10,6 +10,7 @@ use clap::Parser;
 use opts::{Command, Opts};
 
 fn main() -> Result<()> {
+    // TODO: This is bull shit and just use the clap cargo parser babe
     let args = std::env::args()
         .skip_while(|x| {
             return x != "--";

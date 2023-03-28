@@ -24,6 +24,7 @@ pub fn chad() -> Result<()> {
 
     for (idx, path) in htmlers.into_iter().enumerate() {
         let page: Page = path.path().try_into()?;
+
         let component = page.controller();
 
         std::fs::write(page.controller_path(), component)?;

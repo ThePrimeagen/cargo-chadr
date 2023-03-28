@@ -15,7 +15,7 @@ pub fn link(opts: Opts) -> Result<()> {
         .filter(|dir| dir.file_name() == "index.html");
 
     let cgi_bin = PathBuf::from("cgi-bin");
-    _ = std::fs::remove_dir_all(&cgi_bin)?;
+    _ = std::fs::remove_dir_all(&cgi_bin);
     _ = std::fs::create_dir(&cgi_bin);
 
     let the_cow = PathBuf::from(opts.cow_path);

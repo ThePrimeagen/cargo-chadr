@@ -290,14 +290,12 @@ pub const COW: &'static str = r#"
        call 'getquery' using analyzed-query analyzed-script-name.
 
            IF analyzed-script-name IS NOT EQUAL TO "/index.cgi"
-               DISPLAY "I am not the index" analyzed-query
                 STRING analyzed-script-name DELIMITED BY SPACE
                           analyzed-query DELIMITED BY SPACE
                           INTO tmp-query
                END-STRING
 
                move tmp-query to analyzed-query
-               DISPLAY "I am not the index " analyzed-query
             END-IF.
 
 

@@ -1,4 +1,4 @@
-use std::path::{Path, PathBuf};
+use std::{path::{Path, PathBuf}, fmt::Display};
 
 use anyhow::anyhow;
 
@@ -19,6 +19,15 @@ impl Chunk {
         match self {
             Chunk::Text(value) => return value.clone(),
             Chunk::Variable(value) => return format!("%{}", value),
+        }
+    }
+}
+
+impl Display for Chunk {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Chunk::Text(value) => write!(f, "{}", value),
+            Chunk::Variable(value) => write!(f, "%{}", value),
         }
     }
 }
@@ -103,6 +112,7 @@ impl Page {
             .collect::<String>();
 
         return VIEW
+            .replace("__TITLE__", &format!("{} - CHADstack", &self.script_name))
             .replace("__BODY__", &self.contents)
             .replace("__VARIABLES__", &vars);
     }

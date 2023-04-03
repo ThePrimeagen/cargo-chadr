@@ -3,7 +3,7 @@ use std::path::PathBuf;
 use anyhow::Result;
 use walkdir::WalkDir;
 
-use crate::{pages::Page, opts::Opts};
+use crate::{pages::{Page, CGI_BIN}, opts::Opts};
 
 pub fn link(opts: Opts) -> Result<()> {
 
@@ -14,7 +14,7 @@ pub fn link(opts: Opts) -> Result<()> {
         .filter_map(|e| e.ok())
         .filter(|dir| dir.file_name() == "index.html");
 
-    let cgi_bin = PathBuf::from("cgi-bin");
+    let cgi_bin = PathBuf::from(CGI_BIN);
     _ = std::fs::remove_dir_all(&cgi_bin);
     _ = std::fs::create_dir(&cgi_bin);
 

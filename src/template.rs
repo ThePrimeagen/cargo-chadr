@@ -72,7 +72,7 @@ move "__DESTINY__"    to routing-destiny(__INDEX__).
 pub const VIEW: &'static str = r#"
 <html>
     <head>
-        __TITLE__
+        <title>__TITLE__</title>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/2.3.0/alpine-ie11.js"> </script>
         <script>
             __VARIABLES__
@@ -289,9 +289,7 @@ pub const COW: &'static str = r#"
 
        call 'getquery' using analyzed-query analyzed-script-name.
 
-           IF analyzed-script-name IS EQUAL TO "/index.cgi"
-                DISPLAY "I AM INDEX"
-            ELSE
+           IF analyzed-script-name IS NOT EQUAL TO "/index.cgi"
                DISPLAY "I am not the index" analyzed-query
                 STRING analyzed-script-name DELIMITED BY SPACE
                           analyzed-query DELIMITED BY SPACE

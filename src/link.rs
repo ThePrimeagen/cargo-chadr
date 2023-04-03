@@ -23,7 +23,11 @@ pub fn link(opts: Opts) -> Result<()> {
     for page in htmlers {
         let page: Page = page.path().try_into()?;
 
-        let script_name: String = page.script_name.into();
+        let mut script_name: String = page.script_name.into();
+        if script_name == "index" {
+            script_name = String::from("index.cgi");
+        }
+
         let mut the_moon = cgi_bin.clone();
         the_moon.push(script_name);
 

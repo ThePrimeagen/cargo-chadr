@@ -7,6 +7,7 @@ use crate::template::{self, CONTROLLER, VIEW, ROUTE};
 pub const CONTROLLERS: &str = "controllers";
 pub const CGI_BIN: &str = "cgi-bin";
 pub const VIEWS: &str = "views";
+pub const COW_PATH: &str = "the.cow";
 
 #[derive(Debug, Clone)]
 pub enum Chunk {

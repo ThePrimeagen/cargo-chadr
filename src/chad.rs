@@ -3,7 +3,7 @@ use std::path::PathBuf;
 use walkdir::WalkDir;
 
 use crate::{
-    pages::{Page, CONTROLLERS, VIEWS},
+    pages::{Page, CONTROLLERS, VIEWS, COW_PATH},
     template::{ROUTES, COW},
 };
 
@@ -21,6 +21,7 @@ pub fn chad() -> Result<()> {
 
     _ = std::fs::create_dir_all(CONTROLLERS);
     _ = std::fs::create_dir_all(VIEWS);
+    _ = std::fs::remove_file(COW_PATH);
 
     for (idx, path) in htmlers.into_iter().enumerate() {
         let page: Page = path.path().try_into()?;
@@ -38,7 +39,7 @@ pub fn chad() -> Result<()> {
         .replace("__ROUTES__", routes.join("\n").as_str());
 
     std::fs::write("./config.cbl", route_template)?;
-    std::fs::write("./the.cow", COW)?;
+    std::fs::write(COW_PATH, COW)?;
 
     return Ok(());
 }

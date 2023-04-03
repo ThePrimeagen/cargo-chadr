@@ -8,6 +8,7 @@ pub const CONTROLLERS: &str = "controllers";
 pub const CGI_BIN: &str = "cgi-bin";
 pub const VIEWS: &str = "views";
 pub const COW_PATH: &str = "cow.cbl";
+pub const COW_TEMPLATE_PATH: &str = "cowtemplate.cbl";
 
 #[derive(Debug, Clone)]
 pub enum Chunk {

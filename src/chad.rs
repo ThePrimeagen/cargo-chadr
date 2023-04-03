@@ -4,7 +4,7 @@ use walkdir::WalkDir;
 
 use crate::{
     pages::{Page, CONTROLLERS, VIEWS, COW_PATH},
-    template::{ROUTES, COW},
+    template::{ROUTES, COW, COW_TEMPLATE},
 };
 
 pub fn chad() -> Result<()> {
@@ -40,6 +40,7 @@ pub fn chad() -> Result<()> {
 
     std::fs::write("./config.cbl", route_template)?;
     std::fs::write(COW_PATH, COW)?;
+    std::fs::write(COW_TEMPLATE_PATH, COW_TEMPLATE)?;
 
     return Ok(());
 }

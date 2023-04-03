@@ -58,7 +58,10 @@ impl Page {
 
         path.insert(0, self.script_name.to_path_string());
 
-        return path.join("/");
+        let mut route_path = path.join("/");
+        route_path.insert_str(0, "/");
+        return route_path;
+
     }
     pub fn controller(&self) -> String {
         let vars = self.path
